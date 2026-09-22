@@ -1,0 +1,13 @@
+[Unit]
+Description=Wyrd Tray Daemon
+PartOf=graphical-session.target wyrd-shell.service
+After=graphical-session.target dbus.service
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/wyrd-tray
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target default.target

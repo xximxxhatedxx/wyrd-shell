@@ -1,0 +1,121 @@
+[workspace]
+members = [
+    "wyrd-shell",
+    "wyrd-module-sdk",
+    "wyrd-modules/clock",
+    "wyrd-modules/workspaces",
+    "wyrd-modules/system",
+    "wyrd-modules/battery",
+    "wyrd-modules/audio",
+    "wyrd-modules/window",
+    "wyrd-modules/notifications",
+    "wyrd-modules/network",
+    "wyrd-modules/bluetooth",
+    "wyrd-modules/tray",
+    "wyrd-modules/dynamic-color",
+    "wyrd-modules/power-menu",
+    "wyrd-modules/launcher",
+    "wyrd-modules/dnd",
+    "wyrd-modules/clipboard",
+    "wyrd-modules/mpris",
+    "wyrd-modules/brightness",
+    "wyrd-modules/keyboard",
+    "wyrd-audio",
+    "wyrd-clipboard",
+    "wyrd-notifications",
+    "wyrd-tray",
+    "wyrd-windows",
+    "examples/wasm_counter",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+rust-version = "1.85"
+authors = ["xximxxhatedxx <ghostr210305@gmail.com>"]
+repository = "https://github.com/xximxxhatedxx/wyrd-shell"
+homepage = "https://github.com/xximxxhatedxx/wyrd-shell"
+readme = "README.md"
+
+[workspace.dependencies]
+# Core Engine from standalone repo
+wyrd-engine            = { git = "https://github.com/xximxxhatedxx/wyrd-engine", tag = "v0.1.0" }
+wyrd-module-sdk        = { path = "wyrd-module-sdk" }
+
+# GPU & Scene
+wgpu                  = "30"
+pollster              = "0.4"
+glam                  = "0.33"
+bytemuck              = { version = "1.25", features = ["derive"] }
+
+# Wayland
+wayland-client        = "0.31"
+wayland-protocols      = { version = "0.32", features = ["client", "staging", "unstable"] }
+wayland-protocols-wlr  = { version = "0.3", features = ["client"] }
+wayland-backend        = "0.3"
+
+# Input / Keyboard
+xkbcommon              = "0.9"
+
+# Render
+tiny-skia              = "0.12"
+cosmic-text            = "0.19"
+fontdb                 = "0.24"
+image                  = "0.25"
+resvg                  = { version = "0.48", default-features = false }
+
+# Async / Runtime
+tokio                  = { version = "1", features = ["rt-multi-thread", "macros", "net", "sync", "time", "process", "fs", "io-util", "signal"] }
+tokio-util             = "0.7"
+
+# Lua runtime
+mlua                   = { version = "0.12", features = ["lua54", "vendored", "async", "send", "serialize"] }
+
+# Config / Data
+notify-debouncer-mini  = "0.7"
+notify                 = "8"
+serde                  = { version = "1", features = ["derive"] }
+serde_json             = "1"
+toml                   = "0.8"
+kdl                    = "6.7"
+zeroize                = { version = "1.9", features = ["derive"] }
+
+# Collections / Utils
+slotmap                = "1"
+shell-words            = "1"
+parking_lot            = "0.12"
+
+# Time / System
+chrono                 = "0.4"
+sysinfo                = "0.39"
+nucleo-matcher         = "0.3"
+libc                   = "0.2"
+
+# IPC / D-Bus
+zbus                   = "5"
+futures-util           = { version = "0.3.34", default-features = false }
+libpulse-binding       = "2.28"
+
+# Error / Log
+anyhow                 = "1"
+thiserror              = "1"
+log                    = "0.4"
+env_logger             = "0.11"
+
+# CLI
+clap                   = { version = "4", features = ["derive"] }
+
+# Memory Allocator
+mimalloc               = { version = "0.1", default-features = false }
+
+# WASM Runtime
+wasmtime               = "29"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

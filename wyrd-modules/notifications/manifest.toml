@@ -1,0 +1,13 @@
+name = "notifications"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_notifications.wasm"
+description = "Notification count badge and center"
+capabilities = [
+    "dbus:call:session:*",
+    "dbus:subscribe:session:*",
+    "popups",
+    "socket:connect:wyrd-notifications.sock",
+]
+publishes = ["notification.count", "dnd.state", "dnd.toggle", "notification.action", "notification.dismiss", "notification.close"]
+subscribes = ["dnd.state", "dnd.toggle", "notification.new", "notification.closed"]

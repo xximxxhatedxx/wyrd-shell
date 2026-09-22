@@ -1,0 +1,15 @@
+name = "network"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_network.wasm"
+description = "NetworkManager status and popup"
+capabilities = [
+    "dbus:call:system:org.freedesktop.NetworkManager",
+    "dbus:subscribe:system:org.freedesktop.NetworkManager:org.freedesktop.NetworkManager",
+    "dbus:subscribe:system:org.freedesktop.NetworkManager:org.freedesktop.DBus.Properties",
+    "dbus:subscribe:system:org.freedesktop.NetworkManager:org.freedesktop.NetworkManager.Device.Wireless",
+    "popups",
+]
+publishes = ["network.status"]
+subscribes = ["theme.accent"]
+

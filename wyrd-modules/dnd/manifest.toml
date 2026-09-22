@@ -1,0 +1,10 @@
+name = "dnd"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_dnd.wasm"
+description = "Do Not Disturb state toggle"
+capabilities = [
+    "socket:connect:wyrd-notifications.sock",
+]
+publishes = ["dnd.state"]
+subscribes = ["dnd.toggle", "dnd.state"]

@@ -1,0 +1,8 @@
+name = "counter"
+version = "1.0.0"
+level = "wasm"
+entry = "counter.wasm"
+description = "Pluggable interactive counter WASM module"
+capabilities = ["popups"]
+publishes = ["counter.value"]
+subscribes = ["theme.accent"]

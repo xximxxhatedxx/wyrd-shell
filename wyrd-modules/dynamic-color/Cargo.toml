@@ -1,0 +1,15 @@
+[package]
+name = "wyrd-module-dynamic-color"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wyrd-module-sdk = { workspace = true }
+serde_json = { workspace = true }
+serde = { workspace = true }
+toml = { workspace = true }
+anyhow = { workspace = true }

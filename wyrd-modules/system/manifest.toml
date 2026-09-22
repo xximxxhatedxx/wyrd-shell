@@ -1,0 +1,12 @@
+name = "system"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_system.wasm"
+description = "CPU and RAM system metrics"
+capabilities = [
+    "fs:read:/proc/",
+    "popups",
+]
+publishes = ["system.metrics"]
+subscribes = ["theme.accent"]
+interval_ms = 3000

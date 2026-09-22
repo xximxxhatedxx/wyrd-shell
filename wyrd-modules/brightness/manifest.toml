@@ -1,0 +1,17 @@
+name = "brightness"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_brightness.wasm"
+description = "Display brightness and backlight control"
+capabilities = [
+    "fs:read:/sys/class/backlight",
+    "fs:read:/sys/class/backlight/",
+    "dbus:call:system:org.freedesktop.login1",
+    "popups",
+]
+publishes = [
+    "brightness.percent",
+    "brightness.value",
+]
+subscribes = []
+interval_ms = 2000

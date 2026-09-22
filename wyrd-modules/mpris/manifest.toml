@@ -1,0 +1,14 @@
+name = "mpris"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_mpris.wasm"
+description = "MPRIS Media Player Controller & Status"
+capabilities = [
+    "popups",
+    "dbus:call:session:*",
+    "dbus:subscribe:session:*",
+    "fs:read:*",
+]
+publishes = ["mpris.status", "mpris.track"]
+subscribes = ["theme.accent"]
+interval_ms = 1000

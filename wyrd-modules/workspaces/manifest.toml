@@ -1,0 +1,11 @@
+name = "workspaces"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_workspaces.wasm"
+description = "Wayland workspaces tracking (Hyprland, Sway, Niri)"
+capabilities = [
+    "popups",
+    "socket:connect:wyrd-windows.sock",
+]
+publishes = []
+subscribes = []

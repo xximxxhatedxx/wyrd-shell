@@ -1,0 +1,54 @@
+#compdef wyrd-shell
+
+_wyrd_shell() {
+    local context state state_descr line
+    typeset -A opt_args
+
+    _arguments -s -S \
+        '(-c --config)'{-c,--config}'[Path to init.lua configuration]:file:_files -g "*.lua"' \
+        '--daemonize[Run as background daemon]' \
+        '--debug[Enable debug overlay]' \
+        '--log-level[Log level]:level:(trace debug info warn error)' \
+        '--render-mode[Render backend]:mode:(auto gpu cpu)' \
+        '--theme[Switch active theme]:theme:(catppuccin aetheria nord gruvbox tokyo-night)' \
+        '--layout[Switch active bar layout]:layout:(top left)' \
+        '--doctor[Run system and environment diagnostics]' \
+        '--completions[Output shell completion script]:shell:(bash zsh fish)' \
+        '--action[Send IPC action command to running daemon]:action:->actions' \
+        '(-h --help)'{-h,--help}'[Print help message]' \
+        '(-V --version)'{-V,--version}'[Print version information]' && return 0
+
+    case "$state" in
+        actions)
+            local -a common_actions
+            common_actions=(
+                'doctor:Run system and environment diagnostics'
+                'popup:launcher:Open launcher popup'
+                'popup:network:Open network selector popup'
+                'popup:bluetooth:Open bluetooth manager popup'
+                'popup:audio:Open audio output selector'
+                'popup:microphone:Open microphone selector'
+                'popup:battery:Open battery details popup'
+                'popup:system:Open system monitor popup'
+                'popup:calendar:Open calendar and date popup'
+                'popup:mpris:Open media player console'
+                'popup:quicksettings:Open unified control center popup'
+                'popup:power:Open power session menu'
+                'popup:close:Close any open popups'
+                'theme:set catppuccin:Switch to Catppuccin Mocha theme'
+                'theme:set aetheria:Switch to Aetheria Etheric theme'
+                'theme:set nord:Switch to Nord theme'
+                'theme:set gruvbox:Switch to Gruvbox Dark theme'
+                'theme:set tokyo-night:Switch to Tokyo Night theme'
+                'theme:toggle:Cycle between installed themes'
+                'layout:set top:Switch to horizontal top bar layout'
+                'layout:set left:Switch to vertical left bar layout'
+                'layout:toggle:Toggle between top and left layouts'
+                'reload:Reload shell configuration live'
+            )
+            _describe -t actions 'wyrd-shell action' common_actions
+            ;;
+    esac
+}
+
+_wyrd_shell "$@"

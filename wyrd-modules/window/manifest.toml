@@ -1,0 +1,10 @@
+name = "window"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_window.wasm"
+description = "Active window title and icon tracking"
+capabilities = [
+    "socket:connect:wyrd-windows.sock",
+]
+publishes = []
+subscribes = []

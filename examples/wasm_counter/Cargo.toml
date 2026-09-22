@@ -1,0 +1,12 @@
+[package]
+name = "wyrd-module-counter"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wyrd-module-sdk = { path = "../../wyrd-module-sdk" }
+serde_json = { workspace = true }
+anyhow = { workspace = true }

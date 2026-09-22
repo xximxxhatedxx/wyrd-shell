@@ -1,0 +1,9 @@
+name = "dynamic-color"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_dynamic_color.wasm"
+description = "Material You dynamic palette extraction"
+capabilities = ["fs:read"]
+publishes = ["theme.palette", "theme.accent"]
+subscribes = ["theme.request", "wallpaper.change"]
+interval_ms = 500

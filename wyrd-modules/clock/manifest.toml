@@ -1,0 +1,12 @@
+name = "clock"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_clock.wasm"
+description = "Clock and calendar module"
+capabilities = [
+    "popups",
+]
+publishes = ["clock.tick"]
+subscribes = []
+interval_ms = 1000
+align_to_minute = false

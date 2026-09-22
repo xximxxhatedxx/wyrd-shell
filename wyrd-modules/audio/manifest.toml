@@ -1,0 +1,13 @@
+name = "audio"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_audio.wasm"
+description = "Audio volume and device management"
+capabilities = [
+    "popups",
+    "audio:control",
+    "socket:connect:wyrd-audio.sock",
+]
+publishes = ["audio.volume"]
+subscribes = ["theme.accent", "audio.changed"]
+interval_ms = 500

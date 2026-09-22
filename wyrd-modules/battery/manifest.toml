@@ -1,0 +1,16 @@
+name = "battery"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_battery.wasm"
+description = "Battery level and charging status"
+capabilities = [
+    "fs:read:/sys/class/power_supply",
+    "fs:read:/sys/class/power_supply/",
+    "dbus:call:system:net.hadess.PowerProfiles",
+    "dbus:subscribe:system:net.hadess.PowerProfiles:*",
+    "popups",
+]
+publishes = ["battery.percent", "battery.status", "battery.charging"]
+subscribes = []
+interval_ms = 30000
+

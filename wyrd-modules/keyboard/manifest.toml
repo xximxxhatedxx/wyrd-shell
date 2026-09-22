@@ -1,0 +1,12 @@
+name = "keyboard"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_keyboard.wasm"
+description = "Keyboard layout indicator and switcher"
+capabilities = [
+    "socket:connect:wyrd-windows.sock",
+    "popups",
+]
+publishes = []
+subscribes = []
+interval_ms = 5000

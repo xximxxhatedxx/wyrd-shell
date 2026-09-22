@@ -1,0 +1,65 @@
+# Maintainer: Wyrd Shell Authors <https://github.com/xximxxhatedxx/wyrd-shell>
+pkgname=wyrd-shell-bin
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Modular Wayland desktop shell platform with declarative Lua configuration and WASM sandbox"
+arch=('x86_64')
+url="https://github.com/xximxxhatedxx/wyrd-shell"
+license=('MIT' 'Apache-2.0')
+depends=('wayland' 'libxkbcommon' 'libpulse' 'fontconfig' 'freetype2')
+optdepends=(
+    'bluez: Bluetooth module support'
+    'networkmanager: Network module support'
+    'upower: Battery module support'
+    'wyrd-wallpaper: Wallpaper daemon with Material You dynamic color extraction'
+)
+provides=('wyrd-shell')
+conflicts=('wyrd-shell' 'wyrd-shell-git')
+source=("https://github.com/xximxxhatedxx/wyrd-shell/releases/download/v${pkgver}/wyrd-shell-v${pkgver}-linux-${arch}.tar.gz")
+sha256sums=('c07ab42453905ecf300c2470fedcd86d5e2aba8d27d31e0e1d54a5ba22cbb2b5')
+
+package() {
+    cd "${srcdir}/wyrd-shell-v${pkgver}-linux-${arch}"
+
+    # Install binaries
+    install -Dm755 bin/wyrd-shell "${pkgdir}/usr/bin/wyrd-shell"
+    for daemon in wyrd-clipboard wyrd-audio wyrd-notifications wyrd-tray wyrd-windows; do
+        if [ -f "bin/${daemon}" ]; then
+            install -Dm755 "bin/${daemon}" "${pkgdir}/usr/bin/${daemon}"
+        fi
+    done
+
+    # Install systemd user services adapted for /usr/bin installation
+    for service in systemd/*.service; do
+        [ -f "$service" ] || continue
+        install -Dm644 "$service" "${pkgdir}/usr/lib/systemd/user/$(basename "$service")"
+        sed -i 's|%h/\.local/bin/|/usr/bin/|g' "${pkgdir}/usr/lib/systemd/user/$(basename "$service")"
+    done
+
+    # Install shell completions
+    if [ -f completions/wyrd-shell.bash ]; then
+        install -Dm644 completions/wyrd-shell.bash "${pkgdir}/usr/share/bash-completion/completions/wyrd-shell"
+    fi
+    if [ -f completions/_wyrd-shell ]; then
+        install -Dm644 completions/_wyrd-shell "${pkgdir}/usr/share/zsh/site-functions/_wyrd-shell"
+    fi
+    if [ -f completions/wyrd-shell.fish ]; then
+        install -Dm644 completions/wyrd-shell.fish "${pkgdir}/usr/share/fish/vendor_completions.d/wyrd-shell.fish"
+    fi
+
+    # Install shared modules and manifests to /usr/share/wyrd/modules
+    install -dm755 "${pkgdir}/usr/share/wyrd/modules"
+    cp -r modules/* "${pkgdir}/usr/share/wyrd/modules/"
+
+    # Install default theme
+    install -dm755 "${pkgdir}/usr/share/wyrd/themes"
+    cp -r themes/* "${pkgdir}/usr/share/wyrd/themes/"
+
+    # Install surfaces
+    install -dm755 "${pkgdir}/usr/share/wyrd/surfaces"
+    cp -r surfaces/* "${pkgdir}/usr/share/wyrd/surfaces/"
+
+    # Install license and documentation
+    [ -f README.md ] && install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"
+    [ -f LICENSE ] && install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

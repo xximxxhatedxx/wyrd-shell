@@ -1,0 +1,14 @@
+name = "tray"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_tray.wasm"
+description = "System tray SNI status notifier items"
+capabilities = [
+    "dbus:call:session:*",
+    "dbus:subscribe:session:*",
+    "fs:read",
+]
+publishes = []
+subscribes = []
+interval_ms = 1500
+

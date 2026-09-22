@@ -1,0 +1,14 @@
+[Unit]
+Description=Wyrd Windows Daemon
+PartOf=graphical-session.target wyrd-shell.service
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 20); do [ -n "$(ls $XDG_RUNTIME_DIR/hypr/*/.socket.sock 2>/dev/null)" ] && exit 0; sleep 0.5; done; exit 0'
+ExecStart=%h/.local/bin/wyrd-windows
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target default.target

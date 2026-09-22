@@ -1,0 +1,12 @@
+# =============================================================================
+# Wyrd Shell User Settings
+# =============================================================================
+
+# Active appearance theme: "catppuccin", "aetheria", "nord", "gruvbox", "tokyo-night"
+theme = "catppuccin"
+
+# Active bar layout: "top" (Horizontal Top Capsule) or "left" (Vertical Left Capsule)
+layout = "top"
+
+# Dynamic wallpaper color extraction via wyrd-wallpaper
+dynamic_color = true

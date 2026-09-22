@@ -1,0 +1,15 @@
+name = "bluetooth"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_bluetooth.wasm"
+description = "Bluetooth management and popup"
+capabilities = [
+    "dbus:call:system:org.bluez",
+    "dbus:subscribe:system:org.bluez:org.bluez",
+    "dbus:subscribe:system:org.bluez:org.freedesktop.DBus.Properties",
+    "dbus:subscribe:system:org.bluez:org.freedesktop.DBus.ObjectManager",
+    "popups",
+]
+publishes = ["bluetooth.status"]
+subscribes = ["theme.accent"]
+

@@ -1,0 +1,21 @@
+[Unit]
+Description=Wyrd Wayland Shell
+PartOf=graphical-session.target
+After=graphical-session.target
+ConditionEnvironment=WAYLAND_DISPLAY
+
+[Service]
+Type=simple
+Environment="MIMALLOC_PURGE_DELAY=0"
+Environment="MIMALLOC_ARENA_PURGE_MULT=1"
+Environment="MIMALLOC_ALLOW_LARGE_OS_PAGES=0"
+Environment="MIMALLOC_RESERVE_HUGE_OS_PAGES=0"
+Environment="MIMALLOC_ALLOW_THP=0"
+Environment="MIMALLOC_ARENA_EAGER_COMMIT=0"
+Environment="MALLOC_ARENA_MAX=2"
+ExecStart=%h/.local/bin/wyrd-shell
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target default.target

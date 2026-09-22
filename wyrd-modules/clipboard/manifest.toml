@@ -1,0 +1,11 @@
+name = "clipboard"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_clipboard.wasm"
+description = "Clipboard history manager"
+capabilities = [
+    "socket:connect:wyrd-clipboard.sock",
+    "popups",
+]
+publishes = []
+subscribes = []

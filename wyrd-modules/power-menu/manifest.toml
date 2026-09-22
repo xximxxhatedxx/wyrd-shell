@@ -1,0 +1,16 @@
+name = "power-menu"
+version = "1.0.0"
+level = "wasm"
+entry = "wyrd_module_power_menu.wasm"
+description = "System power menu and session controls"
+capabilities = [
+    "dbus:call:system:org.freedesktop.login1",
+    "dbus:call:session:org.freedesktop.ScreenSaver",
+    "socket:connect:wyrd-windows.sock",
+    "popups",
+]
+publishes = [
+    "power.lock_requested",
+    "power.action",
+]
+subscribes = []

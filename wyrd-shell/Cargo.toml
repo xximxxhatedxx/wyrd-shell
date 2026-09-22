@@ -1,0 +1,44 @@
+[package]
+name = "wyrd-shell"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "wyrd_shell"
+path = "src/lib.rs"
+
+[[bin]]
+name = "wyrd-shell"
+path = "src/main.rs"
+
+[dependencies]
+wyrd-engine = { workspace = true }
+wayland-client = { workspace = true }
+tiny-skia = { workspace = true }
+xkbcommon = { workspace = true }
+
+# Async / Runtime
+tokio = { workspace = true }
+
+# Error / Log
+anyhow = { workspace = true }
+log = { workspace = true }
+env_logger = { workspace = true }
+shell-words = { workspace = true }
+serde_json = { workspace = true }
+libc = { workspace = true }
+mimalloc = { workspace = true }
+libmimalloc-sys = { version = "0.1", features = ["extended"] }
+
+# CLI
+clap = { workspace = true }
+toml = { workspace = true }
+
+# Optional systemd
+libsystemd = { version = "0.7", optional = true }
+
+[features]
+default = []
+systemd = ["dep:libsystemd"]
+gpu-render = ["wyrd-engine/gpu-render"]

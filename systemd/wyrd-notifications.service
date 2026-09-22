@@ -1,0 +1,13 @@
+[Unit]
+Description=Wyrd Notifications Daemon
+PartOf=graphical-session.target wyrd-shell.service
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/wyrd-notifications
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target default.target

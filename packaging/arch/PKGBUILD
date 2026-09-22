@@ -1,0 +1,134 @@
+# Maintainer: Wyrd Shell Authors <https://github.com/xximxxhatedxx/wyrd-shell>
+pkgname=wyrd-shell
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Next-generation modular Wayland desktop shell with Rust, WASM sandboxed modules, and Lua styling"
+arch=('x86_64' 'aarch64')
+url="https://github.com/xximxxhatedxx/wyrd-shell"
+license=('MIT' 'Apache-2.0')
+depends=(
+    'glibc'
+    'gcc-libs'
+    'wayland'
+    'libxkbcommon'
+    'dbus'
+    'libpulse'
+)
+makedepends=(
+    'cargo'
+    'rust'
+    'git'
+    'libpulse'
+)
+optdepends=(
+    'pipewire: Recommended for audio control daemon'
+    'wireplumber: Session manager for PipeWire audio'
+    'bluez: Bluetooth device discovery and control'
+    'networkmanager: Network status and Wi-Fi management'
+    'wyrd-wallpaper: Wallpaper daemon with Material You dynamic color extraction'
+)
+provides=('wyrd-shell')
+conflicts=('wyrd-shell-git')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/xximxxhatedxx/wyrd-shell/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "wyrd-shell-$pkgver"
+    export RUSTUP_TOOLCHAIN=stable
+    rustup target add wasm32-unknown-unknown 2>/dev/null || true
+    cargo fetch --locked --target "$CARCH-unknown-linux-gnu"
+}
+
+build() {
+    cd "wyrd-shell-$pkgver"
+    export RUSTUP_TOOLCHAIN=stable
+    export CARGO_TARGET_DIR=target
+
+    # 1. Build shell and companion daemons
+    cargo build --frozen --release -p wyrd-shell
+    local daemons=(
+        "wyrd-audio"
+        "wyrd-clipboard"
+        "wyrd-notifications"
+        "wyrd-tray"
+        "wyrd-windows"
+    )
+    for daemon in "${daemons[@]}"; do
+        cargo build --frozen --release -p "$daemon"
+    done
+
+    # 2. Build WASM modules
+    local modules=(
+        "clock" "workspaces" "system" "battery" "audio"
+        "window" "notifications" "network" "bluetooth" "tray"
+        "dynamic-color" "power-menu" "launcher"
+        "dnd" "clipboard" "mpris" "brightness" "keyboard" "counter"
+    )
+    for mod in "${modules[@]}"; do
+        cargo build -p "wyrd-module-${mod}" --target wasm32-unknown-unknown --release 2>/dev/null || true
+    done
+}
+
+package() {
+    cd "wyrd-shell-$pkgver"
+
+    # Binaries
+    install -Dm755 target/release/wyrd-shell "$pkgdir/usr/bin/wyrd-shell"
+    local daemons=(
+        "wyrd-audio"
+        "wyrd-clipboard"
+        "wyrd-notifications"
+        "wyrd-tray"
+        "wyrd-windows"
+    )
+    for daemon in "${daemons[@]}"; do
+        if [ -f "target/release/$daemon" ]; then
+            install -Dm755 "target/release/$daemon" "$pkgdir/usr/bin/$daemon"
+        fi
+    done
+
+    # WASM Modules and manifests
+    local modules=(
+        "clock" "workspaces" "system" "battery" "audio"
+        "window" "notifications" "network" "bluetooth" "tray"
+        "dynamic-color" "power-menu" "launcher"
+        "dnd" "clipboard" "mpris" "brightness" "keyboard" "counter"
+    )
+    for mod in "${modules[@]}"; do
+        local mod_dest="$pkgdir/usr/lib/wyrd/modules/$mod"
+        install -dm755 "$mod_dest"
+        if [ -f "wyrd-modules/$mod/manifest.toml" ]; then
+            install -Dm644 "wyrd-modules/$mod/manifest.toml" "$mod_dest/manifest.toml"
+        fi
+        local wasm_bin="target/wasm32-unknown-unknown/release/wyrd_module_${mod//-/_}.wasm"
+        if [ -f "$wasm_bin" ]; then
+            install -Dm644 "$wasm_bin" "$mod_dest/wyrd_module_${mod//-/_}.wasm"
+            install -Dm644 "$wasm_bin" "$mod_dest/${mod}.wasm"
+        fi
+    done
+
+    # Systemd user services adapted for /usr/bin installation
+    if [ -d "systemd" ]; then
+        for svc in systemd/*.service; do
+            [ -f "$svc" ] || continue
+            install -Dm644 "$svc" "$pkgdir/usr/lib/systemd/user/$(basename "$svc")"
+            sed -i 's|%h/\.local/bin/|/usr/bin/|g' "$pkgdir/usr/lib/systemd/user/$(basename "$svc")"
+        done
+    fi
+
+    # Examples & themes
+    install -dm755 "$pkgdir/usr/share/wyrd"
+    cp -rf examples/config/* "$pkgdir/usr/share/wyrd/"
+
+    # Shell completions
+    install -Dm644 completions/wyrd-shell.bash "$pkgdir/usr/share/bash-completion/completions/wyrd-shell"
+    install -Dm644 completions/_wyrd-shell "$pkgdir/usr/share/zsh/site-functions/_wyrd-shell"
+    install -Dm644 completions/wyrd-shell.fish "$pkgdir/usr/share/fish/vendor_completions.d/wyrd-shell.fish"
+
+    # License and documentation
+    install -Dm644 README.md "$pkgdir/usr/share/doc/wyrd-shell/README.md"
+    [ -f LICENSE ] && install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    if [ -f "CHANGELOG.md" ]; then
+        install -Dm644 CHANGELOG.md "$pkgdir/usr/share/doc/wyrd-shell/CHANGELOG.md"
+    fi
+}

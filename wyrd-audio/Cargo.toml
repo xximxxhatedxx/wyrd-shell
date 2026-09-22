@@ -1,0 +1,21 @@
+[package]
+name = "wyrd-audio"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "wyrd-audio"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+log = { workspace = true }
+env_logger = { workspace = true }
+clap = { workspace = true }
+libpulse-binding = { workspace = true }
+libc = { workspace = true }
+parking_lot = { workspace = true }

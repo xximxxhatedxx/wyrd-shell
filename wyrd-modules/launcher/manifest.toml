@@ -1,0 +1,20 @@
+name = "launcher"
+version = "0.1.0"
+level = "wasm"
+entry = "wyrd_module_launcher.wasm"
+description = "Application launcher and search module"
+capabilities = [
+    "state:read",
+    "fs:read",
+    "process:spawn:*",
+    "popups",
+    "focus:request",
+]
+publishes = [
+    "launcher.active",
+    "launcher.launched",
+]
+subscribes = []
+
+[config]
+max_items = 8
